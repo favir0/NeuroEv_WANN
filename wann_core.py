@@ -21,6 +21,25 @@ class Connection:
         return self.from_node.node_id, self.to_node.node_id
     
 
+class InnovTracker:
+    def __init__(self):
+        self.current_innovation_number = 0
+        self.innovations = {}
+
+    def get_innovation_number(self, in_node: Node, out_node: Node):
+        key = (in_node.node_id, out_node.node_id)
+        if key not in self.innovations:
+            self.innovations[key] = self.current_innovation_number
+            self.current_innovation_number += 1
+        return self.innovations[key]
+
+    def reset_innovations(self):
+        self.innovations = {}
+        self.current_innovation_number = 0
+
+innov_tracker = InnovTracker()
+
+
 class Genome:
     def __init__(self):
         self.connections: dict[tuple[int, int], Connection] = dict()
@@ -39,6 +58,9 @@ class Genome:
             to_node=out_node,
             weight=weight,
             enabled=True,
+            innovation_number=innov_tracker.get_innovation_number(
+                in_node, out_node
+            ),
         )
         self.connections[connection.connection_id] = connection
         return connection
