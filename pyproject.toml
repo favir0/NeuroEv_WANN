@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "neuroev-wann"
+version = "0.1.0"
+description = ""
+authors = ["favir0 <f4vir0@yandex.ru>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+numpy = "^1.26.4"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
