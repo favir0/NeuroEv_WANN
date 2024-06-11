@@ -2,14 +2,16 @@ from ff_nn import NeuralNetwork
 from population import Population
 from tasks import (
     LogicalOperationsTask,
-    CartPoleTask,
-    BipedalWalkerTask,
     BreastCancerTask,
     GlassTask,
+    CartPoleTask,
+    LunarLanderTask,
+    CarRacingTask,
+    BipedalWalkerTask
 )
 
 if __name__ == "__main__":
-    population = Population(evaluator=LogicalOperationsTask)
+    population = Population(evaluator=CartPoleTask)
     generations = 300
     for generation in range(generations):  # количество поколений
         population.evolve()

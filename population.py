@@ -1,7 +1,7 @@
 import random
 
 from copy import deepcopy
-from config import config
+from configuration import config
 from wann_core import Genome, genome_distance, genome_crossover, innov_tracker
 from ff_nn import NeuralNetwork
 from species import Species

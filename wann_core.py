@@ -1,9 +1,10 @@
-import random 
+import random
 import numpy as np
 
 from copy import deepcopy
 from activation import ActivationF
-from config import config
+from configuration import config
+
 
 class Node:
     def __init__(self, node_id: int, layer: int, activation_f: ActivationF = ActivationF.RELU, activation_response: float = 1):
@@ -23,7 +24,7 @@ class Connection:
     @property
     def connection_id(self):
         return self.from_node.node_id, self.to_node.node_id
-    
+
 
 class InnovTracker:
     def __init__(self):
@@ -49,10 +50,12 @@ class Genome:
         self.connections: dict[tuple[int, int], Connection] = dict()
         self.nodes: list[Node] = list()
         self.fitness: float = 0
+        self.adjusted_fitness: float = 0
 
     def add_node(self, layer: int) -> Node:
         node = Node(node_id=len(self.nodes), layer=layer)
-        node.activation_f = ActivationF.TANH
+        if (config.wann_random_activation_on_init):
+            node.activation_f = random.choice(list(ActivationF))
         self.nodes.append(node)
         return node
 
@@ -68,7 +71,7 @@ class Genome:
         )
         self.connections[connection.connection_id] = connection
         return connection
-    
+
     def mutation_add_connection(self):
         potential_connections = []
         for node_i in self.nodes:
@@ -151,7 +154,7 @@ class Genome:
             self.mutation_split_connection()
             if config.single_structure_mutation:
                 return
-    
+
     def print_genome(self):
         print("Nodes:")
         for node in self.nodes:
@@ -230,6 +233,7 @@ def connection_crossover(connection_id: tuple[int, int], genome0: Genome, genome
 
     # don't care about weight for WANN
     return connection
+
 
 # Stanley formula: delta = с1 * E / N + с2 * D / n + сk3 * W
 # Where E - excess amount; D - disjoint amount; W - avgWeightDiff; N - matches; с1,с2,с3 - constant coefficients

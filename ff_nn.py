@@ -1,5 +1,5 @@
 import pickle
-from config import config
+from configuration import config
 from wann_core import Genome
 import matplotlib.pyplot as plt
 import networkx as nx
