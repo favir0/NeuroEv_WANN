@@ -11,20 +11,20 @@ from tasks import (
 )
 
 if __name__ == "__main__":
-    population = Population(evaluator=CartPoleTask)
+    population = Population(evaluator=LogicalOperationsTask)
     generations = 300
     for generation in range(generations):  # количество поколений
         population.evolve()
         print(f"[{generation}] Champion fitness: {population.champions[-1].fitness}; Species: {len(population.species)}")
-        if (generation % 10 == 0):
-            test_nn = NeuralNetwork(population.champions[-1])
-            test_nn.save(f"./outputs/CartPole/{generation}")
+        # if (generation % 10 == 0):
+        #     test_nn = NeuralNetwork(population.champions[-1])
+        #     test_nn.save(f"./outputs/CartPole/{generation}")
         
         if population.solved_at is not None or generation == generations - 1:
             print(f"Solved at {population.solved_at}")
             print(f"Champion fitness {population.champions[-1].fitness}")
             test_nn = NeuralNetwork(population.champions[-1])
-            test_nn.save(f"./outputs/CartPole/{generation}_solved")
+            # test_nn.save(f"./outputs/CartPole/{generation}_solved")
             population.champions[-1].print_genome()
             test_nn.visualize(show_weights=True)
             population.evaluator.visualize(test_nn)

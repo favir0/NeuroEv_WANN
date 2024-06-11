@@ -3,7 +3,7 @@ from dataclasses import dataclass
 
 @dataclass
 class Configuration:
-    input_nodes: int = 4
+    input_nodes: int = 2
     output_nodes: int = 1
     add_bias_node: bool = True
     bias_value: float = 1
@@ -16,7 +16,7 @@ class Configuration:
     population_size: int = 100
     distance_excess: float = 1.0
     distance_disjoint: float = 1.0
-    distance_weight: float = 0.4
+    distance_activation: float = 0.4
     compatibility_threshold: float = 20
     compatibility_threshold_delta: float = 3
     min_compatibility_threshold: float = 0.1
@@ -43,6 +43,7 @@ class Configuration:
     wann_step: float = 0.5
     wann_random_activation_on_init: bool = True
     wann_initial_weight = 1
+    wann_get_node_from_more_fit = False
 
 
 config = Configuration()

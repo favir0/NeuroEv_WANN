@@ -192,7 +192,10 @@ def genome_crossover(genome0: Genome, genome1: Genome) -> Genome:
     # ------- Adding nodes -------
     # Homologous gene: combine genes from both parents.
     for node0, node1 in zip(more_fit_parent.nodes, less_fit_parent.nodes):
-        node = random.choice((node0, node1))
+        if (config.wann_get_node_from_more_fit):
+            node = node0
+        else:
+            node = random.choice((node0, node1))
         child.nodes.append(deepcopy(node))
 
     # Excess or disjoint gene: copy from the fittest parent.
@@ -247,23 +250,21 @@ def genome_distance(genome0: Genome, genome1: Genome):
 
     excess = 0
     disjoint = 0
-    avg_weight_diff = 0.0
-    matches = 0
+    activation_diff = 0
 
     for i in all_innovations.keys():
-        if i in genome0_innovations and i in genome1_innovations:
-            avg_weight_diff += np.abs(genome0_innovations[i].weight - genome1_innovations[i].weight)
-            matches += 1
-        else:
+        if i not in genome0_innovations or i not in genome1_innovations:
             if i <= min_innovation:
                 disjoint += 1
             else:
                 excess += 1
 
-    avg_weight_diff = (avg_weight_diff / matches) if matches > 0 else avg_weight_diff
+    for genome0_nodes, genome1_nodes in zip(genome0.nodes, genome1.nodes):
+        if (genome0_nodes.activation_f != genome1_nodes.activation_f):
+            activation_diff += 1
 
     return (
         config.distance_excess * excess
         + config.distance_disjoint * disjoint
-        + config.distance_weight * avg_weight_diff
+        + config.distance_activation * activation_diff
     )
