@@ -4,6 +4,8 @@ from tasks import (
     LogicalOperationsTask,
     CartPoleTask,
     BipedalWalkerTask,
+    BreastCancerTask,
+    GlassTask,
 )
 
 if __name__ == "__main__":
