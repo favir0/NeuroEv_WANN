@@ -2,7 +2,7 @@ import random
 
 from copy import deepcopy
 from activation import ActivationF
-
+from config import config
 
 class Node:
     def __init__(self, node_id: int, layer: int, activation_f: ActivationF = ActivationF.RELU, activation_response: float = 1):
@@ -229,3 +229,36 @@ def connection_crossover(connection_id: tuple[int, int], genome0: Genome, genome
 
     # don't care about weight for WANN
     return connection
+
+# Stanley formula: delta = с1 * E / N + с2 * D / n + сk3 * W
+# Where E - excess amount; D - disjoint amount; W - avgWeightDiff; N - matches; с1,с2,с3 - constant coefficients
+def genome_distance(genome0: Genome, genome1: Genome):
+    genome0_innovations = {c.innovation_number: c for c in genome0.connections.values()}
+    genome1_innovations = {c.innovation_number: c for c in genome1.connections.values()}
+
+    all_innovations = genome0_innovations | genome1_innovations
+
+    min_innovation = min(max(genome0_innovations.keys()), max(genome1_innovations.keys()))
+
+    excess = 0
+    disjoint = 0
+    avg_weight_diff = 0.0
+    matches = 0
+
+    for i in all_innovations.keys():
+        if i in genome0_innovations and i in genome1_innovations:
+            avg_weight_diff += np.abs(genome0_innovations[i].weight - genome1_innovations[i].weight)
+            matches += 1
+        else:
+            if i <= min_innovation:
+                disjoint += 1
+            else:
+                excess += 1
+
+    avg_weight_diff = (avg_weight_diff / matches) if matches > 0 else avg_weight_diff
+
+    return (
+        config.distance_excess * excess
+        + config.distance_disjoint * disjoint
+        + config.distance_weight * avg_weight_diff
+    )
