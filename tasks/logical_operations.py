@@ -5,10 +5,8 @@ from tasks.nn_task import NNTask
 
 
 class LogicalOperationsTask(NNTask):
-    def __init__(self, task: str = "XOR", tolerance: float = 0.1, error_type: str = "mse"):
+    def __init__(self, task: str = "XOR"):
         self.task = task
-        self.tolerance = tolerance
-        self.error_type = error_type
         self.epsilon = 0.1
 
         if task == "XOR":
@@ -22,6 +20,24 @@ class LogicalOperationsTask(NNTask):
             self.expected_outputs = [[0], [1], [1], [1]]
         else:
             raise ValueError(f"Task {task} is not supported yet.")
+
+
+        self._name = "LogicalOperations"
+        self._input_nodes = 2
+        self._output_nodes = 1
+        print(f"Initialized '{self._name}' task with {self._input_nodes} inputs and {self._output_nodes} outputs")
+    
+    @property
+    def task_name(self) -> str:
+        return self._name
+
+    @property
+    def input_nodes(self) -> int:
+        return self._input_nodes
+
+    @property
+    def output_nodes(self) -> int:
+        return self._output_nodes
 
     def evaluate(self, neural_network: NeuralNetwork) -> float:
         total_fitness = 0

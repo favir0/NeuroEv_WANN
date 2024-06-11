@@ -6,13 +6,31 @@ from tasks.nn_task import NNTask
 
 
 class LunarLanderTask(NNTask):
-    def __init__(self, threshold: int = 0.9):
+    def __init__(self, threshold: int = 0.95):
         self.threshold = threshold
-        self.episodes = 1
+        self.episodes = 3
         self.env = gym.make("LunarLander-v2")
-        self.env.reset(seed=42)
+        self.env.reset(seed=100)
         self.min_reward = -300
         self.max_reward = 250
+
+        self._name = "LunarLander"
+        self._input_nodes = self.env.observation_space.shape[0]
+        self._output_nodes = self.env.action_space.n
+        print(f"Initialized '{self._name}' task with {self._input_nodes} inputs and {self._output_nodes} outputs")
+    
+    @property
+    def task_name(self) -> str:
+        return self._name
+
+    @property
+    def input_nodes(self) -> int:
+        return self._input_nodes
+
+    @property
+    def output_nodes(self) -> int:
+        return self._output_nodes
+
 
     def preprocess_state(self, state: np.ndarray) -> np.ndarray:
         high = self.env.observation_space.high
@@ -28,7 +46,7 @@ class LunarLanderTask(NNTask):
     def evaluate(self, neural_network: NeuralNetwork) -> float:
         total_reward = 0
         for _ in range(self.episodes):
-            state, _ = self.env.reset()
+            state, _ = self.env.reset(seed=100)
             done = False
             truncate = False
             steps = 0
@@ -45,7 +63,7 @@ class LunarLanderTask(NNTask):
     def idk_evaluate(self, neural_network: NeuralNetwork) -> float:
         total_reward = 0
         for _ in range(self.episodes):
-            state, _ = self.env.reset()
+            state, _ = self.env.reset(seed=100)
             done = False
             truncate = False
             steps = 0
@@ -66,7 +84,7 @@ class LunarLanderTask(NNTask):
 
     def visualize(self, neural_network: NeuralNetwork):
         self.env = gym.make("LunarLander-v2", render_mode="human")
-        state, _ = self.env.reset(seed=42)
+        state, _ = self.env.reset(seed=100)
         done = False
         reward_total = 0
         truncate = False

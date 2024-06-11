@@ -14,3 +14,18 @@ class NNTask(ABC):
     @abstractmethod
     def visualize(self, neural_network: NeuralNetwork):
         pass
+
+    @property
+    @abstractmethod
+    def task_name(self) -> str:
+        pass
+
+    @property
+    @abstractmethod
+    def input_nodes(self) -> int:
+        pass
+
+    @property
+    @abstractmethod
+    def output_nodes(self) -> int:
+        pass

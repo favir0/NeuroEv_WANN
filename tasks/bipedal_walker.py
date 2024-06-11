@@ -14,6 +14,23 @@ class BipedalWalkerTask(NNTask):
         self.min_reward = -300
         self.max_reward = 300
 
+        self._name = "BipedalWalker"
+        self._input_nodes = self.env.observation_space.shape[0]
+        self._output_nodes = self.env.action_space.shape[0]
+        print(f"Initialized '{self._name}' task with {self._input_nodes} inputs and {self._output_nodes} outputs")
+
+    @property
+    def task_name(self) -> str:
+        return self._name
+
+    @property
+    def input_nodes(self) -> int:
+        return self._input_nodes
+
+    @property
+    def output_nodes(self) -> int:
+        return self._output_nodes
+
     def preprocess_state(self, state: np.ndarray) -> np.ndarray:
         high = self.env.observation_space.high
         low = self.env.observation_space.low
@@ -53,10 +70,9 @@ class BipedalWalkerTask(NNTask):
                 output = neural_network.feed(state)
                 action = np.clip(output, -1, 1)
                 state, reward, done, truncate, _ = self.env.step(action)
-                #state = self.preprocess_state(state)
                 total_reward += reward
                 steps += 1
-            average_reward = (total_reward / self.episodes)
+        average_reward = (total_reward / self.episodes)
         return average_reward
 
     def solve(self, neural_network: NeuralNetwork) -> bool:

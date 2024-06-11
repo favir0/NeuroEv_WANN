@@ -3,8 +3,8 @@ from dataclasses import dataclass
 
 @dataclass
 class Configuration:
-    input_nodes: int = 2
-    output_nodes: int = 1
+    input_nodes: int = 8
+    output_nodes: int = 4
     add_bias_node: bool = True
     bias_value: float = 1
     max_depth: int = 10

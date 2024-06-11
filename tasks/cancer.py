@@ -34,6 +34,23 @@ class BreastCancerTask(NNTask):
         self.train_answers = data_output[:400]
         self.test_answers = data_output[400:]
 
+        self._name = "BreastCancer"
+        self._input_nodes = 9
+        self._output_nodes = 2
+        print(f"Initialized '{self._name}' task with {self._input_nodes} inputs and {self._output_nodes} outputs")
+    
+    @property
+    def task_name(self) -> str:
+        return self._name
+
+    @property
+    def input_nodes(self) -> int:
+        return self._input_nodes
+
+    @property
+    def output_nodes(self) -> int:
+        return self._output_nodes
+
     def evaluate(self, neural_network: NeuralNetwork) -> float:
         total_fitness = 0
         for input_vector, expected_output in zip(self.train_data, self.train_answers):
@@ -56,9 +73,9 @@ class BreastCancerTask(NNTask):
         for input_vector, expected_output in zip(self.test_data, self.test_answers):
             predicted_output = neural_network.feed(input_vector)
 
-            if all(
+            if (
                 np.abs(np.array(predicted_output) - np.array(expected_output)) < 0.5
-            ):
+            ).all():
                 right_ans += 1
             else:
                 wrong_ans += 1

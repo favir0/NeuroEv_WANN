@@ -35,6 +35,23 @@ class GlassTask(NNTask):
         self.train_answers = data_output[:150]
         self.test_answers = data_output[150:]
 
+        self._name = "Glass"
+        self._input_nodes = 9
+        self._output_nodes = 6
+        print(f"Initialized '{self._name}' task with {self._input_nodes} inputs and {self._output_nodes} outputs")
+    
+    @property
+    def task_name(self) -> str:
+        return self._name
+
+    @property
+    def input_nodes(self) -> int:
+        return self._input_nodes
+
+    @property
+    def output_nodes(self) -> int:
+        return self._output_nodes
+    
     def evaluate(self, neural_network: NeuralNetwork) -> float:
         total_fitness = 0
         for input_vector, expected_output in zip(self.train_data, self.train_answers):

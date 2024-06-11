@@ -6,12 +6,12 @@ from tasks import (
     GlassTask,
     CartPoleTask,
     LunarLanderTask,
-    CarRacingTask,
     BipedalWalkerTask
 )
 
 if __name__ == "__main__":
-    population = Population(evaluator=LunarLanderTask)
-    loaded_nn = NeuralNetwork.load("./outputs/LunarLander/57_solved")
+    population = Population(evaluator=BreastCancerTask)
+    task_name = population.evaluator.task_name
+    loaded_nn = NeuralNetwork.load(f"./outputs/{task_name}/90")
     loaded_nn.visualize(show_weights=True)
     population.evaluator.visualize(loaded_nn)

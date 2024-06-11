@@ -6,25 +6,25 @@ from tasks import (
     GlassTask,
     CartPoleTask,
     LunarLanderTask,
-    CarRacingTask,
     BipedalWalkerTask
 )
 
 if __name__ == "__main__":
-    population = Population(evaluator=LogicalOperationsTask)
+    population = Population(evaluator=LunarLanderTask)
+    task_name = population.evaluator.task_name
     generations = 300
-    for generation in range(generations):  # количество поколений
+    for generation in range(generations):
         population.evolve()
         print(f"[{generation}] Champion fitness: {population.champions[-1].fitness}; Species: {len(population.species)}")
-        # if (generation % 10 == 0):
-        #     test_nn = NeuralNetwork(population.champions[-1])
-        #     test_nn.save(f"./outputs/CartPole/{generation}")
+        if (generation % 10 == 0):
+            test_nn = NeuralNetwork(population.champions[-1])
+            test_nn.save(f"./outputs/{task_name}/{generation}")
         
         if population.solved_at is not None or generation == generations - 1:
             print(f"Solved at {population.solved_at}")
             print(f"Champion fitness {population.champions[-1].fitness}")
             test_nn = NeuralNetwork(population.champions[-1])
-            # test_nn.save(f"./outputs/CartPole/{generation}_solved")
+            test_nn.save(f"./outputs/{task_name}/{generation}_solved")
             population.champions[-1].print_genome()
             test_nn.visualize(show_weights=True)
             population.evaluator.visualize(test_nn)

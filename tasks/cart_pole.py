@@ -13,6 +13,23 @@ class CartPoleTask(NNTask):
         self.env = gym.make("CartPole-v1", max_episode_steps=5000)
         self.env.reset(seed=42)
 
+        self._name = "CartPole"
+        self._input_nodes = self.env.observation_space.shape[0]
+        self._output_nodes = 1
+        print(f"Initialized '{self._name}' task with {self._input_nodes} inputs and {self._output_nodes} outputs")
+    
+    @property
+    def task_name(self) -> str:
+        return self._name
+
+    @property
+    def input_nodes(self) -> int:
+        return self._input_nodes
+
+    @property
+    def output_nodes(self) -> int:
+        return self._output_nodes
+
     def evaluate(self, neural_network: NeuralNetwork) -> float:
         total_reward = 0
         for i in range(self.episodes):

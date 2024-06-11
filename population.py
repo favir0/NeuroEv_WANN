@@ -14,39 +14,42 @@ def tournament_selection(genomes: list[Genome], k=3):
     return selected[0]
 
 
-def create_initial_genome() -> Genome:
-    individual = Genome()
-
-    input_nodes = []
-    for _ in range(config.input_nodes):
-        node = individual.add_node(0)
-        input_nodes.append(node)
-
-    if config.add_bias_node:
-        node = individual.add_node(0)
-
-    out_nodes = []
-    for _ in range(config.output_nodes):
-        node = individual.add_node(config.max_depth + 1)
-        out_nodes.append(node)
-
-    for input_node in input_nodes:
-        if random.random() < config.initial_connection_prob:
-            out_node = random.choice(out_nodes)
-            weight = config.wann_initial_weight
-            individual.add_connection(input_node, out_node, weight)
-    return individual
-
-
 class Population:
     def __init__(self, evaluator):
-        self.genomes: list[Genome] = [create_initial_genome() for _ in range(config.population_size)]
+        self.genomes: list[Genome] = []
         self.species: list[Species] = []
         self.current_compatibility_threshold: int = config.compatibility_threshold
         self.champions: list[Genome] = []
         self.evaluator: NNTask = evaluator()
         self.solved_at: int | None = None
         self.generation_index: int = 0
+        self.input_nodes_number = self.evaluator.input_nodes
+        self.output_nodes_number = self.evaluator.output_nodes
+
+        self.genomes = [self.create_initial_genome() for _ in range(config.population_size)]
+
+    def create_initial_genome(self) -> Genome:
+        individual = Genome()
+
+        input_nodes = []
+        for _ in range(self.input_nodes_number):
+            node = individual.add_node(0)
+            input_nodes.append(node)
+
+        if config.add_bias_node:
+            node = individual.add_node(0)
+
+        out_nodes = []
+        for _ in range(self.output_nodes_number):
+            node = individual.add_node(config.max_depth + 1)
+            out_nodes.append(node)
+
+        for input_node in input_nodes:
+            if random.random() < config.initial_connection_prob:
+                out_node = random.choice(out_nodes)
+                weight = config.wann_initial_weight
+                individual.add_connection(input_node, out_node, weight)
+        return individual
 
     def speciate(self):
         for specie in self.species:
