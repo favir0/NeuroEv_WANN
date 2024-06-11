@@ -3,6 +3,7 @@ from population import Population
 from tasks import (
     LogicalOperationsTask,
     CartPoleTask,
+    BipedalWalkerTask,
 )
 
 if __name__ == "__main__":
