@@ -2,6 +2,7 @@ from ff_nn import NeuralNetwork
 from population import Population
 from tasks import (
     LogicalOperationsTask,
+    CartPoleTask,
 )
 
 if __name__ == "__main__":
