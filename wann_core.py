@@ -1,5 +1,6 @@
 import random 
 
+from copy import deepcopy
 from activation import ActivationF
 
 
@@ -149,3 +150,82 @@ class Genome:
             self.mutation_split_connection()
             if config.single_structure_mutation:
                 return
+    
+    def print_genome(self):
+        print("Nodes:")
+        for node in self.nodes:
+            print(
+                f'''Node ID: {node.node_id}, 
+                Layer: {node.layer}, 
+                Activation Function: {node.activation_f}, 
+                Activation Response: {node.activation_response}''')
+
+        print("\nConnections:")
+        for conn_id, connection in self.connections.items():
+            print(
+                f'''Connection ID: {conn_id}, 
+                From Node: {connection.from_node.node_id}, 
+                To Node: {connection.to_node.node_id}, 
+                Weight: {connection.weight}, 
+                Enabled: {connection.enabled}, 
+                Innovation Number: {connection.innovation_number}''')
+
+
+def genome_crossover(genome0: Genome, genome1: Genome) -> Genome:
+    child = Genome()
+
+    if genome0.fitness > genome1.fitness:
+        more_fit_parent = genome0
+        less_fit_parent = genome1
+    elif genome0.fitness < genome1.fitness:
+        more_fit_parent = genome0
+        less_fit_parent = genome1
+        # if fitness is equal - let the more_fit be the larges one
+    else:
+        more_fit_parent = max(genome0, genome1, key=lambda x: len(x.nodes))
+        less_fit_parent = min(genome0, genome1, key=lambda x: len(x.nodes))
+
+    # ------- Adding nodes -------
+    # Homologous gene: combine genes from both parents.
+    for node0, node1 in zip(more_fit_parent.nodes, less_fit_parent.nodes):
+        node = random.choice((node0, node1))
+        child.nodes.append(deepcopy(node))
+
+    # Excess or disjoint gene: copy from the fittest parent.
+    # If fitnesses are equal - we can still copy more_fit because it always the largest one
+    # and nodes are always sequential like 0 -> 1 -> 2 -> 3 etc
+    if len(more_fit_parent.nodes) > len(less_fit_parent.nodes):
+        for node in more_fit_parent.nodes[len(less_fit_parent.nodes) :]:
+            child.nodes.append(deepcopy(node))
+
+    # ------- Adding connections -------
+    intersection = (more_fit_parent.connections.keys() & less_fit_parent.connections.keys())
+
+    # Homologous gene: combine genes from both parents.
+    for connection_id in intersection:
+        connection = connection_crossover(connection_id, more_fit_parent, less_fit_parent)
+        child.connections[connection_id] = connection
+
+    # Excess or disjoint gene: copy from the fittest parent.
+    # If fitnesses are equal - copy from both
+    if more_fit_parent.fitness == less_fit_parent.fitness:
+        connection_union = more_fit_parent.connections | less_fit_parent.connections
+    # else only from more_fit
+    else:
+        connection_union = more_fit_parent.connections
+
+    for connection_id, connection in connection_union.items():
+        if connection_id not in intersection:
+            child.connections[connection_id] = deepcopy(connection)
+
+    return child
+
+def connection_crossover(connection_id: tuple[int, int], genome0: Genome, genome1: Genome):
+    connection = deepcopy(genome0.connections[connection_id])
+    connection.enabled = (
+        genome0.connections[connection_id].enabled
+        and genome0.connections[connection_id].enabled
+    ) or random.random() > config.prob_reenable_connection
+
+    # don't care about weight for WANN
+    return connection
