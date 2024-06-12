@@ -8,7 +8,7 @@ class NNTask(ABC):
         pass
 
     @abstractmethod
-    def solve(self, neural_network: NeuralNetwork) -> float:
+    def solve(self, neural_network: NeuralNetwork) -> bool:
         pass
 
     @abstractmethod

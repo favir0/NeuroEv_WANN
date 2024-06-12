@@ -187,8 +187,8 @@ def genome_crossover(genome0: Genome, genome1: Genome) -> Genome:
         more_fit_parent = genome0
         less_fit_parent = genome1
     elif genome0.fitness < genome1.fitness:
-        more_fit_parent = genome0
-        less_fit_parent = genome1
+        more_fit_parent = genome1
+        less_fit_parent = genome0
         # if fitness is equal - let the more_fit be the larges one
     else:
         more_fit_parent = max(genome0, genome1, key=lambda x: len(x.nodes))

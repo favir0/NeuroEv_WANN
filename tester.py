@@ -13,9 +13,9 @@ from tasks import (
 test_on_different_weights = True
 
 if __name__ == "__main__":
-    population = Population(evaluator=CartPoleTask)
+    population = Population(evaluator=BreastCancerTask)
     task_name = population.evaluator.task_name
-    loaded_nn = NeuralNetwork.load(f"./outputs/{task_name}/1_solved")
+    loaded_nn = NeuralNetwork.load(f"./outputs/{task_name}/26_solved")
 
     if test_on_different_weights:
         print("Different shared weights test")

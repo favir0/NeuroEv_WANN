@@ -13,14 +13,11 @@ from tasks import (
 
 def save_genome_to_nn(genome: Genome, name_addition: str = ""):
     test_nn = NeuralNetwork(genome)
-    if config.wann_use_weights_pool:
-        test_nn.best_weight = genome.best_weight
-        test_nn.weights_pool = config.wann_weights_pool
     test_nn.save(f"./outputs/{task_name}/{generation}{name_addition}")
 
 
 if __name__ == "__main__":
-    population = Population(evaluator=CartPoleTask)
+    population = Population(evaluator=BreastCancerTask)
     task_name = population.evaluator.task_name
     generations = 300
     for generation in range(generations):

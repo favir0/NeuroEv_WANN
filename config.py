@@ -33,7 +33,7 @@ class Configuration:
     # Совместимость
     distance_excess: float = 1.0                            # Расстояние для лишних генов
     distance_disjoint: float = 1.0                          # Расстояние для разобщенных генов
-    distance_activation: float = 0.2
+    distance_activation: float = 0.2    
     compatibility_threshold: float = 5                      # Порог совместимости
     compatibility_threshold_delta: float = 1                # Изменение порога совместимости
     min_compatibility_threshold: float = 0.1                # Минимальный порог совместимости
