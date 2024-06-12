@@ -72,6 +72,8 @@ class NeuralNetwork:
                 )
                 if layer == 0 and i == len(nodes) - 1 and config.add_bias_node:
                     labels[node.node_id] = "bias"
+                elif layer == 0:
+                    labels[node.node_id] = f"{node.node_id} ({node.layer})"
                 else:
                     labels[node.node_id] = f"{node.node_id} ({node.layer})\n{node.activation_f.name}"
 

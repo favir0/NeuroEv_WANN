@@ -15,11 +15,11 @@ class Configuration:
     max_activation_response_delta: float = 0.3                  # Максимальное изменение отклика активации при мутации
 
     # Вероятности мутаций
-    mutation_add_connection_prob: float = 0.25              # Вероятность добавления связи
-    mutation_split_connection_prob: float = 0.2             # Вероятность разделения связи (добавления ноды)
-    mutation_disable_connection_prob: float = 0.20          # Вероятность отключения связи
-    mutation_enable_connection_prob: float = 0.20           # Вероятность включения связи
-    mutation_change_activation_f_prob: float = 0.35         # Вероятность изменения функции активации
+    mutation_add_connection_prob: float = 0.1              # Вероятность добавления связи
+    mutation_split_connection_prob: float = 0.1             # Вероятность разделения связи (добавления ноды)
+    mutation_disable_connection_prob: float = 0.15          # Вероятность отключения связи
+    mutation_enable_connection_prob: float = 0.15           # Вероятность включения связи
+    mutation_change_activation_f_prob: float = 0.30         # Вероятность изменения функции активации
     mutation_change_activation_response_prob: float = 0.3   # Вероятность изменения отклика активации
     mutation_reenable_connection: float = 0.15              # Вероятность активации выключенной связи
 
