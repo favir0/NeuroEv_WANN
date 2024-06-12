@@ -1,4 +1,4 @@
-from configuration import config
+from config import config
 from wann_core import Genome
 
 

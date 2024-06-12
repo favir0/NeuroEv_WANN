@@ -1,7 +1,7 @@
 import random
 
 from copy import deepcopy
-from configuration import config
+from config import config
 from wann_core import Genome, genome_distance, genome_crossover, innov_tracker
 from ff_nn import NeuralNetwork
 from species import Species
@@ -82,8 +82,25 @@ class Population:
             specie.full_recalculate()
 
     def evaluate_genome(self, genome: Genome) -> float:
-        nn = NeuralNetwork(genome)
-        evaluation = self.evaluator.evaluate(nn)
+        evaluation = 0
+        if config.wann_use_weights_pool:
+            best_evaluation = 0
+            best_weight = 0
+            sum_evaluation = 0
+            for weight in config.wann_weights_pool:
+                genome.set_all_weights(weight)
+                nn = NeuralNetwork(genome)
+                temp_evaluation = self.evaluator.evaluate(nn)
+                sum_evaluation += temp_evaluation
+                if temp_evaluation > best_evaluation:
+                    best_evaluation = temp_evaluation
+                    best_weight = weight
+            genome.best_weight = best_weight
+            avg_evaluation = sum_evaluation / len(config.wann_weights_pool)
+            evaluation = best_evaluation * config.wann_best_eval_multiplier + avg_evaluation * config.wann_avg_eval_multiplier
+        else:
+            nn = NeuralNetwork(genome)
+            evaluation = self.evaluator.evaluate(nn)
         return evaluation
 
     def check_for_stagnation(self):
@@ -101,7 +118,11 @@ class Population:
         self.champions.append(max(self.genomes, key=lambda genome: genome.fitness))
 
     def look_for_solution(self):
-        nn = NeuralNetwork(self.champions[-1])
+        champion = self.champions[-1]
+        if (config.wann_use_weights_pool):
+            champion.set_all_weights(champion.best_weight)
+        nn = NeuralNetwork(champion)
+        
         if self.evaluator.solve(nn):
             self.solved_at = self.generation_index
 
@@ -116,7 +137,7 @@ class Population:
         new_genomes_global = []
         for specie in self.species:
             specie.genomes.sort(key=lambda ind: ind.fitness, reverse=True)
-            keep = max(1, int(round(len(specie.genomes) * config.genome_survival_rate)))
+            keep = max(1, int(round(len(specie.genomes) * config.specie_survival_rate)))
             pool = specie.genomes[:keep]
             if config.elitism_enabled and len(specie.genomes) >= 1:
                 specie.genomes = specie.genomes[:1]

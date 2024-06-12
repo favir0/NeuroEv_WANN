@@ -83,17 +83,17 @@ class LunarLanderTask(NNTask):
         return average_reward >= self.threshold
 
     def visualize(self, neural_network: NeuralNetwork):
-        self.env = gym.make("LunarLander-v2", render_mode="human")
-        state, _ = self.env.reset(seed=100)
+        env = gym.make("LunarLander-v2", render_mode="human")
+        state, _ = env.reset(seed=100)
         done = False
         reward_total = 0
         truncate = False
         while not done and not truncate:
-            self.env.render()
+            env.render()
             output = neural_network.feed(state)
             action = np.argmax(output)
-            state, reward, done, truncate, _ = self.env.step(action)
+            state, reward, done, truncate, _ = env.step(action)
             reward_total += reward
-        print(reward_total)
-        print(self.normalize_reward(reward_total))
-        self.env.close()
+        print(f"Total reward: {reward_total}")
+        print(f"Normalized reward: {self.normalize_reward(reward_total)}")
+        env.close()

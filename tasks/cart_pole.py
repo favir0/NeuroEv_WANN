@@ -49,15 +49,15 @@ class CartPoleTask(NNTask):
         return average_reward >= self.threshold
 
     def visualize(self, neural_network: NeuralNetwork):
-        self.env = gym.make("CartPole-v1", render_mode="human", max_episode_steps=5000)
-        state, _ = self.env.reset()
+        env = gym.make("CartPole-v1", render_mode="human", max_episode_steps=300)
+        state, _ = env.reset()
         done = False
         truncate = False
         reward_total = 0
         while not done and not truncate:
-            self.env.render()
+            env.render()
             output = neural_network.feed(state)
             action = 0 if output[0] < 0 else 1
-            state, reward, done, truncate, info = self.env.step(action)
+            state, reward, done, truncate, info = env.step(action)
             reward_total += reward
-        self.env.close()
+        env.close()

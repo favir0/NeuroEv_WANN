@@ -3,44 +3,64 @@ from dataclasses import dataclass
 
 @dataclass
 class Configuration:
-    add_bias_node: bool = True
-    bias_value: float = 1
-    max_depth: int = 10
-    weight_range: tuple[float, float] = (-2, 2)
-    initial_connection_prob: float = 1
-    max_activation_response_delta: float = 0.3
-    activation_response_range: tuple[float, float] = (0, 1)
-    prob_reenable_connection: float = 0.15
-    population_size: int = 100
-    distance_excess: float = 1.0
-    distance_disjoint: float = 1.0
-    distance_weight: float = 0.4
-    compatibility_threshold: float = 20
-    compatibility_threshold_delta: float = 3
-    min_compatibility_threshold: float = 0.1
-    mutation_add_connection_prob: float = 0.25
-    mutation_split_connection_prob: float = 0.2
-    mutation_disable_connection_prob: float = 0.20
-    mutation_enable_connection_prob: float = 0.20
-    mutation_change_activation_f_prob: float = 0.35
-    mutation_change_activation_response_prob: float = 0.3
-    single_structure_mutation: bool = False
-    reset_innovations: bool = True
-    target_species: int = 15
-    elitism_enabled: bool = True
-    genome_survival_rate: float = 0.3
-    allow_age_fitness_ajustment: bool = True
-    young_age: int = 5
-    young_multiplier: float = 1.2
-    old_age: int = 15
-    old_multiplier: float = 0.5
-    max_tournament_champions: int = 3
+    # Генерация сети
+    add_bias_node: bool = True                              # Добавление сдвига
+    bias_value: float = 1                                   # Значение смещения
+    max_depth: int = 10                                     # Максимальная глубина сети
+    initial_connection_prob: float = 1                      # создания начальной связи для ноды инпута
 
-    stagnation_age: int = 15
+    # Диапазоны значений
+    weight_range: tuple[float, float] = (-2, 2)                 # Диапазон весов связей
+    activation_response_range: tuple[float, float] = (0, 1)     # Диапазон отклика функции активации
+    max_activation_response_delta: float = 0.3                  # Максимальное изменение отклика активации при мутации
 
-    wann_step: float = 0.5
-    wann_random_activation_on_init: bool = True
-    wann_initial_weight = 1
+    # Вероятности мутаций
+    mutation_add_connection_prob: float = 0.25              # Вероятность добавления связи
+    mutation_split_connection_prob: float = 0.2             # Вероятность разделения связи (добавления ноды)
+    mutation_disable_connection_prob: float = 0.20          # Вероятность отключения связи
+    mutation_enable_connection_prob: float = 0.20           # Вероятность включения связи
+    mutation_change_activation_f_prob: float = 0.35         # Вероятность изменения функции активации
+    mutation_change_activation_response_prob: float = 0.3   # Вероятность изменения отклика активации
+    mutation_reenable_connection: float = 0.15              # Вероятность активации выключенной связи
 
+    # Параметры популяции
+    population_size: int = 100                              # Размер популяции
+    single_structure_mutation: bool = False                 # Единичная структурная мутация
+    reset_innovations: bool = True                          # Сброс списка инноваций
+    target_species: int = 15                                # Целевое количество видов
+    max_tournament_champions: int = 3                       # Максимальное количество чемпионов турнира
+
+    # Совместимость
+    distance_excess: float = 1.0                            # Расстояние для лишних генов
+    distance_disjoint: float = 1.0                          # Расстояние для разобщенных генов
+    distance_activation: float = 0.2
+    compatibility_threshold: float = 5                      # Порог совместимости
+    compatibility_threshold_delta: float = 1                # Изменение порога совместимости
+    min_compatibility_threshold: float = 0.1                # Минимальный порог совместимости
+
+    # Элитизм
+    elitism_enabled: bool = True                            # Включение элитизма
+    specie_survival_rate: float = 0.3                       # Доля выживаемости для вида
+
+    # Возрастная настройка
+    allow_age_fitness_ajustment: bool = True                # Разрешить настройку фитнеса по возрасту
+    young_age: int = 5                                      # Молодой возраст
+    young_multiplier: float = 1.2                           # Множитель для молодого возраста
+    old_age: int = 15                                       # Старый возраст
+    old_multiplier: float = 0.5                             # Множитель для старого возраста
+
+    # Стагнация
+    stagnation_age: int = 15                                # Возраст стагнации
+
+    # Параметры WANN (Weight Agnostic Neural Networks)
+    wann_random_activation_on_init: bool = True             # Генерировать случайную функцию активации при инициализации новой ноды
+    wann_initial_weight: float = 1                          # Начальный вес
+    wann_use_weights_pool: bool = True                      # Использование пула весов
+    wann_weights_pool = [-2, -1, 1, 2]                      # Пул весов
+    wann_best_eval_multiplier: float = 0.7                  # Множитель для лучшего результата из пула
+    wann_avg_eval_multiplier: float = 0.3                   # Множитель для среднего результата из пула
+    wann_get_node_from_more_fit: bool = False               # Получение ноды из более приспособленного родителя
+    wann_use_custom_fitness: bool = False                   # Использование пользовательской функции фитнеса
+    
 
 config = Configuration()

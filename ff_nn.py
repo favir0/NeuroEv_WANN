@@ -1,5 +1,5 @@
 import pickle
-from configuration import config
+from config import config
 from wann_core import Genome
 import matplotlib.pyplot as plt
 import networkx as nx
@@ -12,6 +12,10 @@ class NeuralNetwork:
         self.connections = [
             conn for conn in genome.connections.values() if conn.enabled
         ]
+
+    def set_all_weights(self, weight: float):
+        for connection in self.connections:
+            connection.weight = weight
 
     def feed(self, inputs: list[float]) -> list[float]:
         node_values = {node.node_id: 0.0 for node in self.nodes.values()}

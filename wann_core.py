@@ -3,7 +3,7 @@ import numpy as np
 
 from copy import deepcopy
 from activation import ActivationF
-from configuration import config
+from config import config
 
 
 class Node:
@@ -51,6 +51,7 @@ class Genome:
         self.nodes: list[Node] = list()
         self.fitness: float = 0
         self.adjusted_fitness: float = 0
+        self.best_weight = 0
 
     def add_node(self, layer: int) -> Node:
         node = Node(node_id=len(self.nodes), layer=layer)
@@ -106,7 +107,7 @@ class Genome:
 
         connection = random.choice(possible_connections)
         node = self.add_node(layer=connection.from_node.layer + 1)
-        self.add_connection(in_node=connection.from_node, out_node=node, weight=config.wann_initial_weight)
+        self.add_connection(in_node=connection.from_node, out_node=node, weight=connection.weight)
         self.add_connection(in_node=node, out_node=connection.to_node, weight=connection.weight)
 
     def mutation_disable_connection(self):
@@ -236,7 +237,7 @@ def connection_crossover(connection_id: tuple[int, int], genome0: Genome, genome
     connection.enabled = (
         genome0.connections[connection_id].enabled
         and genome0.connections[connection_id].enabled
-    ) or random.random() > config.prob_reenable_connection
+    ) or random.random() > config.mutation_reenable_connection
 
     # don't care about weight for WANN
     return connection
