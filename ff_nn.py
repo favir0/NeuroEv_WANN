@@ -40,7 +40,7 @@ class NeuralNetwork:
         ]
 
         return [node_values[node.node_id] for node in output_nodes]
-
+    
     def visualize(self, show_weights=True):
         G = nx.DiGraph()
 

@@ -72,6 +72,10 @@ class Genome:
         self.connections[connection.connection_id] = connection
         return connection
 
+    def set_all_weights(self, new_weight_value: float):
+        for connection in self.connections.values():
+            connection.weight = new_weight_value
+
     def mutation_add_connection(self):
         potential_connections = []
         for node_i in self.nodes:

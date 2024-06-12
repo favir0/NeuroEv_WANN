@@ -43,7 +43,9 @@ class Configuration:
     wann_step: float = 0.5
     wann_random_activation_on_init: bool = True
     wann_initial_weight = 1
+    wann_weights_pool = [-2, -1, 1, 2]
     wann_get_node_from_more_fit = False
+    wann_use_custom_fitness = False
 
 
 config = Configuration()
