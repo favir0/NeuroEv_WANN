@@ -11,7 +11,11 @@ numpy = "^1.26.4"
 matplotlib = "^3.9.0"
 networkx = "^3.3"
 gymnasium = {extras = ["box2d"], version = "^0.29.1"}
+seaborn = "^0.13.2"
 
+
+[tool.poetry.group.dev.dependencies]
+ipykernel = "^6.29.4"
 
 [build-system]
 requires = ["poetry-core"]

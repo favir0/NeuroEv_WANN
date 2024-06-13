@@ -34,7 +34,7 @@ class Configuration:
     distance_excess: float = 1.0                            # Расстояние для лишних генов
     distance_disjoint: float = 1.0                          # Расстояние для разобщенных генов
     distance_activation: float = 0.2    
-    compatibility_threshold: float = 5                      # Порог совместимости
+    compatibility_threshold: float = 10                      # Порог совместимости
     compatibility_threshold_delta: float = 1                # Изменение порога совместимости
     min_compatibility_threshold: float = 0.1                # Минимальный порог совместимости
 
@@ -62,5 +62,6 @@ class Configuration:
     wann_get_node_from_more_fit: bool = False               # Получение ноды из более приспособленного родителя
     wann_use_custom_fitness: bool = False                   # Использование пользовательской функции фитнеса
     
-
+    # Сохранение данных для визуализации
+    save_visualization_data: bool = True
 config = Configuration()

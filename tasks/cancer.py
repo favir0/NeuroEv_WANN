@@ -25,7 +25,7 @@ def mse(y_true, y_pred):
 
 class BreastCancerTask(NNTask):
     def __init__(self):
-        self.tolerance = 0.95
+        self.tolerance = 1
         data_input, data_output = init_dataset()
         self.data_input = data_input
         self.data_output = data_output

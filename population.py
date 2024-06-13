@@ -26,6 +26,18 @@ class Population:
         self.input_nodes_number = self.evaluator.input_nodes
         self.output_nodes_number = self.evaluator.output_nodes
 
+        # For visualization
+        self.min_connections = []
+        self.max_connections = []
+        self.min_nodes = []
+        self.max_nodes = []
+        self.avg_fitness = []
+        self.species_amount = []
+        self.compatibility_thresholds = []
+        self.avg_species_age = []
+        self.species_ages = []
+        self.max_species_age = []
+
         self.genomes = [self.create_initial_genome() for _ in range(config.population_size)]
 
     def create_initial_genome(self) -> Genome:
@@ -161,10 +173,50 @@ class Population:
                 new_genomes_global += new_genomes
         self.genomes = new_genomes_global
 
+    def save_visual_data(self):
+        max_con = 0
+        max_node = 0
+        min_con = 10000
+        min_node = 10000
+        sum_fitness = 0
+
+        for genome in self.genomes:
+            cur_len_cons = len(genome.connections)
+            if cur_len_cons > max_con:
+                max_con = cur_len_cons
+            elif cur_len_cons < min_con:
+                min_con = cur_len_cons
+
+            cur_len_nodes = len(genome.nodes)
+            if cur_len_nodes > max_node:
+                max_node = cur_len_cons
+            elif cur_len_nodes < min_node:
+                min_node = cur_len_cons
+            
+            sum_fitness += genome.fitness
+
+        self.min_connections.append(min_con)
+        self.max_connections.append(max_con)
+        self.min_nodes.append(min_node)
+        self.max_nodes.append(max_node)
+        self.avg_fitness.append(sum_fitness/len(self.genomes))
+        self.species_amount.append(len(self.species))
+        self.compatibility_thresholds.append(self.current_compatibility_threshold)
+
+        species_ages = [specie.age for specie in self.species]
+
+        avg_species_age = sum(species_ages) / len(species_ages) if species_ages else 0
+        self.species_ages.append(deepcopy(species_ages))
+        self.avg_species_age.append(avg_species_age)
+        self.max_species_age.append(max(species_ages, default=0))
+
+
     def evolve(self):
         print(f"genomes: {len(self.genomes)}; species: {len(self.species)}")
         self.speciate()
         self.evaluate_all_fitness()
+        if config.save_visualization_data:
+            self.save_visual_data()
         self.find_champion()
         self.look_for_solution()
         self.check_for_stagnation()
