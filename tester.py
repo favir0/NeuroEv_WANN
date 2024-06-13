@@ -10,12 +10,12 @@ from tasks import (
     BipedalWalkerTask
 )
 
-test_on_different_weights = True
+test_on_different_weights = False
 
 if __name__ == "__main__":
     population = Population(evaluator=LunarLanderTask)
     task_name = population.evaluator.task_name
-    loaded_nn = NeuralNetwork.load(f"./outputs/{task_name}/30_solved")
+    loaded_nn = NeuralNetwork.load(f"./outputs/{task_name}/30")
 
     if test_on_different_weights:
         print("Different shared weights test")

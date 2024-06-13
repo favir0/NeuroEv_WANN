@@ -189,9 +189,9 @@ class Population:
 
             cur_len_nodes = len(genome.nodes)
             if cur_len_nodes > max_node:
-                max_node = cur_len_cons
+                max_node = cur_len_nodes
             elif cur_len_nodes < min_node:
-                min_node = cur_len_cons
+                min_node = cur_len_nodes
             
             sum_fitness += genome.fitness
 

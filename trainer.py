@@ -24,13 +24,13 @@ def save(population: Population, filename: str):
 if __name__ == "__main__":
     population = Population(evaluator=LunarLanderTask)
     task_name = population.evaluator.task_name
-    generations = 300
+    generations = 50
     for generation in range(generations):
         population.evolve()
         print(f"[{generation}] Champion fitness: {population.champions[-1].fitness}; Species: {len(population.species)}")
         if generation % 10 == 0:
             save_genome_to_nn(population.champions[-1])
-            save(population, f"./outputs/PopulationDumps/{task_name}_evo_pop_new_solution_{generation}")
+            save(population, f"./outputs/PopulationDumps/{task_name}_evo_lunar_finalpyth_{generation}")
         
         if population.solved_at is not None or generation == generations - 1:
             champion = population.champions[-1]
@@ -42,6 +42,6 @@ if __name__ == "__main__":
             test_nn = NeuralNetwork(champion)
             test_nn.visualize(show_weights=True)
             population.evaluator.visualize(test_nn)
-            break
+            
     
-    save(population, f"./outputs/PopulationDumps/{task_name}_evo_pop_new_solution_result")
+    save(population, f"./outputs/PopulationDumps/{task_name}_evo_lunar_final_result")
